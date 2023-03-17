@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import convertMs from './comvert-ms';
 
 const refs = {
@@ -47,7 +48,7 @@ function onClose(selectedDates) {
 
   if (pickedDate < new Date().getTime()) {
     refs.startButton.setAttribute('disabled', 'true');
-    alert('"Please choose a date in the future"');
+    Notify.failure('Please choose a date in the future');
     return;
   }
 
