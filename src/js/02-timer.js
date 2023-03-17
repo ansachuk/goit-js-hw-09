@@ -20,14 +20,20 @@ const options = {
 let pickedDate = null;
 
 refs.startButton.setAttribute('disabled', 'true');
+
 flatpickr(refs.textInpur, options);
 
 function makeStartTimer() {
-  setInterval(() => {
+  const id = setInterval(() => {
     const { days, hours, minutes, seconds } = convertMs(
       pickedDate - new Date().getTime()
     );
     const { daysField, hoursField, minutesField, secondsField } = refs;
+
+    if (seconds < 0) {
+      clearInterval(id);
+      return;
+    }
 
     daysField.textContent = addLeadingZero(days);
     hoursField.textContent = addLeadingZero(hours);
