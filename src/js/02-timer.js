@@ -1,26 +1,44 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import convertMs from './comvert-ms';
 
-const textInpurRef = document.querySelector('#datetime-picker');
-const startButtonRef = document.querySelector('[data-start]');
-let pickedDate = null;
+const refs = {
+  textInpur: document.querySelector('#datetime-picker'),
+  startButton: document.querySelector('[data-start]'),
+  daysField: document.querySelector('[data-days]'),
+  hoursField: document.querySelector('[data-hours]'),
+  minutesField: document.querySelector('[data-minutes]'),
+  secondsField: document.querySelector('[data-seconds]'),
+};
 const options = {
-  minDate: 'today',
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onClose(selectedDates, dateStr) {
-    console.log(selectedDates[0]);
-    pickedDate = dateStr;
-  },
+  onClose,
 };
+let pickedDate = null;
 
-flatpickr(textInpurRef, options);
+refs.startButton.setAttribute('disabled', 'true');
+flatpickr(refs.textInpur, options);
 
-startButtonRef.addEventListener('click', makeStartTimerToPickDay);
-
-function makeStartTimerToPickDay() {
-  const date = new Date(pickedDate);
-  console.log(date.getTime());
+function makeStartTimer() {
+  setInterval(() => {
+    difference = convertMs(pickedDate - new Date().getTime());
+    console.log(difference);
+  }, 1000);
 }
+
+function onClose(selectedDates) {
+  pickedDate = selectedDates[0].getTime();
+
+  if (pickedDate < new Date().getTime()) {
+    refs.startButton.setAttribute('disabled', 'true');
+    alert('"Please choose a date in the future"');
+    return;
+  }
+
+  refs.startButton.removeAttribute('disabled');
+}
+
+refs.startButton.addEventListener('click', makeStartTimer);
