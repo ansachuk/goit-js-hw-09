@@ -24,8 +24,15 @@ flatpickr(refs.textInpur, options);
 
 function makeStartTimer() {
   setInterval(() => {
-    difference = convertMs(pickedDate - new Date().getTime());
-    console.log(difference);
+    const { days, hours, minutes, seconds } = convertMs(
+      pickedDate - new Date().getTime()
+    );
+    const { daysField, hoursField, minutesField, secondsField } = refs;
+
+    daysField.textContent = addLeadingZero(days);
+    hoursField.textContent = addLeadingZero(hours);
+    minutesField.textContent = addLeadingZero(minutes);
+    secondsField.textContent = addLeadingZero(seconds);
   }, 1000);
 }
 
@@ -39,6 +46,13 @@ function onClose(selectedDates) {
   }
 
   refs.startButton.removeAttribute('disabled');
+}
+
+function addLeadingZero(value) {
+  if (String(value).length === 1) {
+    return `0${value}`;
+  }
+  return value;
 }
 
 refs.startButton.addEventListener('click', makeStartTimer);
