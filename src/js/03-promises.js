@@ -16,14 +16,17 @@ function createPromise(position, delay) {
   promise
     .then((position, delay) => {
       Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+      console.log(position, delay);
     })
-    .catch((number, delay) => {
+    .catch((position, delay) => {
       Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
+      console.log(position, delay);
     });
 }
 function makePromiseList(firstDelay, step, amount) {
   for (let i = 0; i < amount; i += 1) {
-    const timeout = i === 0 ? firstDelay : step;
+    let timeout = firstDelay + step * i;
+    console.log(timeout);
     setTimeout(() => {
       createPromise(i + 1, timeout);
     }, timeout);
@@ -35,7 +38,11 @@ function runPromises(e) {
     elements: { delay, step, amount },
   } = e.currentTarget;
 
-  makePromiseList(delay.value, step.value, amount.value);
+  makePromiseList(
+    Number(delay.value),
+    Number(step.value),
+    Number(amount.value)
+  );
 }
 
 formRef.addEventListener("submit", runPromises);
