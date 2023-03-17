@@ -7,26 +7,23 @@ function createPromise(position, delay) {
 
   const promise = new Promise((resolve, reject) => {
     if (shouldResolve) {
-      resolve(position, delay);
+      resolve({ position, delay });
     } else {
-      reject(position, delay);
+      reject({ position, delay });
     }
   });
 
   promise
-    .then((position, delay) => {
+    .then(({ position, delay }) => {
       Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-      console.log(position, delay);
     })
-    .catch((position, delay) => {
+    .catch(({ position, delay }) => {
       Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-      console.log(position, delay);
     });
 }
 function makePromiseList(firstDelay, step, amount) {
   for (let i = 0; i < amount; i += 1) {
     let timeout = firstDelay + step * i;
-    console.log(timeout);
     setTimeout(() => {
       createPromise(i + 1, timeout);
     }, timeout);
